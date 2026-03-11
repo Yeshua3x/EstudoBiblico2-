@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Estudos Bíblicos</title>
+
+<style>
+
+body{
+font-family: Arial, sans-serif;
+background:#f4f4f4;
+padding:30px;
+text-align:center;
+}
+
+h1{
+color:#333;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+.search-bar{
+margin-top:20px;
+}
+
+input{
+
+padding:10px;
+font-size:16px;
+border:1px solid #ccc;
+border-radius:5px;
+width:250px;
+
+}
+
+button{
+
+background:#007BFF;
+color:white;
+border:none;
+padding:10px 14px;
+border-radius:5px;
+cursor:pointer;
+font-size:16px;
+transition:0.3s;
+
+}
+
+button:hover{
+
+background:#0056b3;
+transform:scale(1.05);
+
+}
+
+.buttons{
+
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+margin-top:25px;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Estudos Bíblicos</h1>
+
+<div class="search-bar">
+
+<input type="text" id="searchInput" placeholder="Buscar estudo...">
+
+<button onclick="buscarEstudo()">Buscar</button>
+
+</div>
+
+<div id="buttons" class="buttons"></div>
+
+</div>
+
+<script>
+
+let estudos=[];
+
+async function carregarEstudos(){
+
+const resposta = await fetch("estudos.json");
+
+estudos = await resposta.json();
+
+criarBotoes();
+
+}
+
+function criarBotoes(){
+
+const area=document.getElementById("buttons");
+
+area.innerHTML="";
+
+estudos.forEach(estudo=>{
+
+const botao=document.createElement("button");
+
+botao.innerText=estudo.titulo;
+
+botao.onclick=()=>abrirLink(estudo.url);
+
+area.appendChild(botao);
+
+});
+
+}
+
+function abrirLink(url){
+
+window.location.href=url;
+
+}
+
+function buscarEstudo(){
+
+const termo=document.getElementById("searchInput").value.toLowerCase().trim();
+
+const encontrado = estudos.find(estudo=>estudo.titulo.toLowerCase()===termo);
+
+if(encontrado){
+
+window.location.href=encontrado.url;
+
+}else{
+
+alert("Estudo não encontrado");
+
+}
+
+}
+
+carregarEstudos();
+
+</script>
+
+</body>
+</html>
